@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import ImageZoom from "./ImageZoom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
@@ -36,16 +37,15 @@ export default function ProductImageGallery({
     <div className="sticky top-28 h-fit">
       <div className="relative rounded-3xl overflow-hidden border border-border bg-surface">
         <AnimatePresence mode="wait">
-          <motion.img
+          <motion.div
             key={activeImage}
-            src={images[activeImage]}
-            alt={product.name}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
-            className="w-full aspect-square object-cover"
-          />
+          >
+            <ImageZoom src={images[activeImage]} alt={product.name} />
+          </motion.div>
         </AnimatePresence>
         <button
           onClick={previousImage}
