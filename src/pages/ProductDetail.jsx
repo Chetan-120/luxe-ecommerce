@@ -1,5 +1,5 @@
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 import {
   Star,
@@ -10,25 +10,41 @@ import {
   Truck,
   ShieldCheck,
   RotateCcw,
-  Heart,
   Zap,
 } from "lucide-react";
+
 import { products } from "../data/products";
+import reviewsData from "../data/reviews";
+
 import { useCartStore } from "../store/useCartStore";
 import { useWishlistStore } from "../store/useWishlistStore";
-import { useEffect } from "react";
 import { useRecentlyViewedStore } from "../store/useRecentlyViewedStore";
+
 import ProductCarousel from "../components/ProductCarousel";
+import ReviewSummary from "../components/ReviewSummary";
+import ReviewCard from "../components/ReviewCard";
+import ReviewForm from "../components/ReviewForm";
+import ProductImageGallery from "../components/ProductImageGallery";
+import { getReviewsByProduct, saveReview } from "../utils/reviewStorage";
 
 const sizes = ["S", "M", "L", "XL"];
 
 export default function ProductDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const product = products.find((p) => p.id === Number(id));
+  const product = useMemo(
+    () => products.find((p) => p.id === Number(id)),
+    [id],
+  );
   const [qty, setQty] = useState(1);
-  const [activeImg, setActiveImg] = useState(0);
+
   const [selectedSize, setSelectedSize] = useState(null);
+  const initialReviews = useMemo(
+    () => getReviewsByProduct(Number(id), reviewsData[Number(id)] || []),
+    [id],
+  );
+
+  const [reviews, setReviews] = useState(() => initialReviews);
   const addItem = useCartStore((s) => s.addItem);
   const { toggleWishlist, isWishlisted } = useWishlistStore();
   const addView = useRecentlyViewedStore((s) => s.addView);
@@ -55,7 +71,12 @@ export default function ProductDetail() {
   const discount = 15 + (product.id % 3) * 5;
   const original = Math.round(product.price * (1 + discount / 100));
   const needsSize = product.category === "Fashion";
-  const thumbnails = [product.image, product.image, product.image];
+  const images = product.images || [
+    product.image,
+    product.image,
+    product.image,
+    product.image,
+  ];
 
   const handleAddToCart = () => {
     if (needsSize && !selectedSize) return;
@@ -68,6 +89,12 @@ export default function ProductDetail() {
     navigate("/checkout");
   };
 
+  const handleReviewSubmit = (review) => {
+    saveReview(Number(id), review);
+
+    setReviews((current) => [review, ...current]);
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-6 pt-28 pb-28 md:pb-20">
       <Link
@@ -78,48 +105,12 @@ export default function ProductDetail() {
       </Link>
 
       <div className="grid md:grid-cols-2 gap-14">
-        <div className="sticky top-28 h-fit">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.97 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5 }}
-            className="relative rounded-3xl overflow-hidden bg-surface aspect-square border border-border group"
-          >
-            <img
-              src={thumbnails[activeImg]}
-              alt={product.name}
-              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-            />
-            <span className="absolute top-4 left-4 badge-offer text-xs font-semibold px-2.5 py-1 rounded-md">
-              {discount}% OFF
-            </span>
-            <button
-              onClick={() => toggleWishlist(product)}
-              className="absolute top-4 right-4 w-10 h-10 rounded-full bg-card shadow-md flex items-center justify-center"
-            >
-              <Heart
-                size={17}
-                className={
-                  wishlisted ? "fill-primary text-primary" : "text-ink"
-                }
-              />
-            </button>
-          </motion.div>
-
-          <div className="flex gap-3 mt-4">
-            {thumbnails.map((img, i) => (
-              <button
-                key={i}
-                onClick={() => setActiveImg(i)}
-                className={`w-16 h-16 rounded-xl overflow-hidden border-2 transition-colors ${
-                  activeImg === i ? "border-primary" : "border-border"
-                }`}
-              >
-                <img src={img} alt="" className="w-full h-full object-cover" />
-              </button>
-            ))}
-          </div>
-        </div>
+        <ProductImageGallery
+          product={product}
+          wishlisted={wishlisted}
+          discount={discount}
+          onWishlist={() => toggleWishlist(product)}
+        />
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -261,8 +252,42 @@ export default function ProductDetail() {
         </button>
       </div>
 
+      <section className="mt-24">
+        <ReviewSummary reviews={reviews} />
+
+        <div className="mt-10">
+          <h2 className="text-3xl font-display font-bold text-ink">
+            Customer Reviews
+          </h2>
+
+          <p className="mt-2 text-muted">
+            {reviews.length} review{reviews.length !== 1 ? "s" : ""}
+          </p>
+        </div>
+
+        <div className="mt-8 space-y-6">
+          {reviews.length > 0 ? (
+            reviews.map((review) => (
+              <ReviewCard key={review.id} review={review} />
+            ))
+          ) : (
+            <div className="bg-card border border-border rounded-3xl p-10 text-center">
+              <h3 className="text-xl font-semibold text-ink">No Reviews Yet</h3>
+
+              <p className="mt-2 text-muted">
+                Be the first person to review this product.
+              </p>
+            </div>
+          )}
+        </div>
+
+        <div className="mt-14">
+          <ReviewForm onSubmit={handleReviewSubmit} />
+        </div>
+      </section>
+
       {recentlyViewed.length > 0 && (
-        <div className="-mx-6">
+        <div className="mt-24 -mx-6">
           <ProductCarousel
             subtitle="YOUR HISTORY"
             title="Recently Viewed"
