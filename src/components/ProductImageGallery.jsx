@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import ProductLightbox from "./ProductLightbox";
 import ImageZoom from "./ImageZoom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -13,6 +14,7 @@ export default function ProductImageGallery({
     product.images && product.images.length ? product.images : [product.image];
 
   const [activeImage, setActiveImage] = useState(0);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
 
   const previousImage = () => {
     setActiveImage((prev) => (prev === 0 ? images.length - 1 : prev - 1));
@@ -43,6 +45,8 @@ export default function ProductImageGallery({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
+            onClick={() => setLightboxOpen(true)}
+            className="cursor-zoom-in"
           >
             <ImageZoom src={images[activeImage]} alt={product.name} />
           </motion.div>
@@ -98,6 +102,13 @@ export default function ProductImageGallery({
           </button>
         ))}
       </div>
+      <ProductLightbox
+        open={lightboxOpen}
+        images={images}
+        current={activeImage}
+        setCurrent={setActiveImage}
+        onClose={() => setLightboxOpen(false)}
+      /> 
     </div>
   );
 }
