@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 export default function ProductCarousel({
   title,
   subtitle,
-  products,
+  products = [],
   viewAllLink = "/shop",
 }) {
   const scrollRef = useRef(null);
@@ -18,8 +18,8 @@ export default function ProductCarousel({
   };
 
   return (
-    <section className="max-w-7xl mx-auto px-6 py-10">
-      <div className="flex items-end justify-between mb-5">
+    <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
+      <div className="mb-5 flex items-end justify-between gap-4">
         <div>
           {subtitle && (
             <span className="text-primary text-xs font-semibold tracking-wide">
@@ -56,21 +56,21 @@ export default function ProductCarousel({
 
       <div
         ref={scrollRef}
-        className="flex gap-4 overflow-x-auto no-scrollbar pb-2 snap-x"
+        className="flex gap-4 overflow-x-auto pb-2 no-scrollbar snap-x snap-mandatory"
       >
         {products.map((p, i) => (
           <ProductCard
             key={p.id}
             product={p}
             index={i}
-            className="min-w-[240px] max-w-[240px] snap-start"
+            className="w-[220px] flex-shrink-0 snap-start sm:w-[240px]"
           />
         ))}
       </div>
 
       <Link
         to={viewAllLink}
-        className="md:hidden flex items-center justify-center gap-1 mt-5 text-sm font-medium text-primary"
+        className="mt-6 flex items-center justify-center gap-2 text-sm font-semibold text-primary md:hidden"
       >
         View All <ArrowRight size={15} />
       </Link>

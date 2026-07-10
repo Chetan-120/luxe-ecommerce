@@ -9,19 +9,19 @@ const ReviewCard = ({ review }) => {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.35 }}
-      className="bg-card border border-border rounded-3xl p-6"
+      className="rounded-3xl border border-border bg-card p-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg sm:p-6"
     >
-      <div className="flex items-start gap-4">
+      <div className="flex items-start gap-3 sm:gap-4">
         <img
           src={review.avatar}
           alt={review.name}
-          className="w-14 h-14 rounded-full object-cover"
+          className="h-12 w-12 rounded-full object-cover sm:h-14 sm:w-14"
         />
 
         <div className="flex-1">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
             <div>
-              <h3 className="font-semibold text-lg text-ink">
+              <h3 className="text-base font-semibold text-ink sm:text-lg">
                 {review.name}
               </h3>
 
@@ -46,15 +46,15 @@ const ReviewCard = ({ review }) => {
             </span>
           </div>
 
-          <h4 className="mt-4 text-lg font-semibold text-ink">
+          <h4 className="mt-4 text-base font-semibold text-ink sm:text-lg">
             {review.title}
           </h4>
 
-          <p className="mt-2 leading-7 text-muted">
+          <p className="mt-2 text-sm leading-7 text-muted sm:text-base">
             {review.comment}
           </p>
 
-          <button className="mt-5 flex items-center gap-2 rounded-xl border border-border px-4 py-2 text-sm font-medium text-muted transition hover:bg-surface hover:text-ink">
+          <button className="mt-5 inline-flex items-center gap-2 rounded-xl border border-border px-4 py-2 text-sm font-medium text-muted transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary active:scale-95">
             <ThumbsUp size={16} />
             Helpful ({review.helpful})
           </button>

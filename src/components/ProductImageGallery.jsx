@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import ProductLightbox from "./ProductLightbox";
 import ImageZoom from "./ImageZoom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, ChevronUp } from "lucide-react";
 
 export default function ProductImageGallery({
   product,
@@ -14,6 +14,7 @@ export default function ProductImageGallery({
     product.images && product.images.length ? product.images : [product.image];
 
   const [activeImage, setActiveImage] = useState(0);
+  const totalImages = images.length;
   const [lightboxOpen, setLightboxOpen] = useState(false);
 
   const previousImage = () => {
@@ -22,6 +23,9 @@ export default function ProductImageGallery({
 
   const nextImage = () => {
     setActiveImage((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+  };
+  const selectImage = (index) => {
+    setActiveImage(index);
   };
 
   useEffect(() => {
@@ -36,7 +40,7 @@ export default function ProductImageGallery({
   }, [images.length]);
 
   return (
-    <div className="sticky top-28 h-fit">
+    <div className="relative md:sticky md:top-28 h-fit">
       <div className="relative rounded-3xl overflow-hidden border border-border bg-surface">
         <AnimatePresence mode="wait">
           <motion.div
@@ -48,29 +52,54 @@ export default function ProductImageGallery({
             onClick={() => setLightboxOpen(true)}
             className="cursor-zoom-in"
           >
-            <ImageZoom src={images[activeImage]} alt={product.name} />
+            <div className="relative">
+              <ImageZoom src={images[activeImage]} alt={product.name} />
+
+              <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 gap-2">
+                {images.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => selectImage(index)}
+                    className={`h-2 rounded-full transition-all duration-300 ${
+                      activeImage === index ? "w-8 bg-white" : "w-2 bg-white/50"
+                    }`}
+                  />
+                ))}
+              </div>
+
+              <div className="absolute bottom-4 right-4 flex items-center gap-1 rounded-full bg-black/60 px-3 py-1 text-xs text-white backdrop-blur">
+                <ChevronUp size={12} />
+                Tap to Zoom
+              </div>
+            </div>
           </motion.div>
         </AnimatePresence>
         <button
           onClick={previousImage}
-          className="absolute left-4 top-1/2 -translate-y-1/2 z-20 h-10 w-10 rounded-full bg-card/90 backdrop-blur flex items-center justify-center shadow-md hover:scale-105 transition"
+          className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-20 h-10 w-10 rounded-full bg-card/90 backdrop-blur flex items-center justify-center shadow-md hover:scale-105 transition"
         >
           <ChevronLeft size={18} />
         </button>
 
         <button
           onClick={nextImage}
-          className="absolute right-4 top-1/2 -translate-y-1/2 z-20 h-10 w-10 rounded-full bg-card/90 backdrop-blur flex items-center justify-center shadow-md hover:scale-105 transition"
+          className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-20 h-10 w-10 rounded-full bg-card/90 backdrop-blur flex items-center justify-center shadow-md hover:scale-105 transition"
         >
           <ChevronRight size={18} />
         </button>
-        <span className="absolute top-4 left-4 badge-offer text-xs font-semibold px-3 py-1 rounded-md">
-          {discount}% OFF
-        </span>
 
+        <div className="absolute top-4 left-4 flex flex-col gap-2">
+          <span className="badge-offer rounded-md px-3 py-1 text-xs font-semibold">
+            {discount}% OFF
+          </span>
+
+          <span className="rounded-full bg-black/70 px-3 py-1 text-xs font-medium text-white backdrop-blur">
+            {activeImage + 1} / {totalImages}
+          </span>
+        </div>
         <button
           onClick={onWishlist}
-          className="absolute top-4 right-4 h-10 w-10 rounded-full bg-card shadow-md flex items-center justify-center"
+          className="absolute top-4 right-2 md:right-4 h-10 w-10 rounded-full bg-card shadow-md flex items-center justify-center"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -85,12 +114,12 @@ export default function ProductImageGallery({
         </button>
       </div>
 
-      <div className="mt-4 grid grid-cols-4 gap-3">
+      <div className="mt-4 flex gap-3 overflow-x-auto pb-2 no-scrollbar">
         {images.map((image, index) => (
           <button
             key={index}
-            onClick={() => setActiveImage(index)}
-            className={`overflow-hidden rounded-xl border-2 transition-all duration-300 hover:scale-105 ${
+            onClick={() => selectImage(index)}
+            className={`w-20 flex-shrink-0 overflow-hidden rounded-xl border-2 transition-all duration-300 ${
               activeImage === index ? "border-primary" : "border-border"
             }`}
           >
@@ -108,7 +137,7 @@ export default function ProductImageGallery({
         current={activeImage}
         setCurrent={setActiveImage}
         onClose={() => setLightboxOpen(false)}
-      /> 
+      />
     </div>
   );
 }
