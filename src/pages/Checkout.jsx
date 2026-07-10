@@ -89,7 +89,7 @@ export default function Checkout() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-6 pt-28 pb-20">
+    <div className="mx-auto max-w-6xl px-4 pt-24 pb-24 sm:px-6 md:pt-28">
       <button
         onClick={() => navigate("/cart")}
         className="inline-flex items-center gap-2 text-muted hover:text-primary transition-colors mb-8 text-sm font-medium"
@@ -101,30 +101,36 @@ export default function Checkout() {
         Checkout
       </h1>
 
-      <div className="flex items-center gap-4 mb-9">
-        {["Shipping", "Payment"].map((label, i) => (
-          <div key={label} className="flex items-center gap-2">
-            <div
-              className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${
-                step >= i + 1
-                  ? "bg-primary text-white"
-                  : "bg-surface text-muted"
-              }`}
-            >
-              {i + 1}
+      <div className="mb-10 overflow-x-auto">
+        <div className="flex min-w-max items-center gap-4">
+          {["Shipping", "Payment"].map((label, i) => (
+            <div key={label} className="flex items-center gap-2">
+              <div
+                className={`flex h-8 w-8 items-center justify-center rounded-full text-sm font-semibold ${
+                  step >= i + 1
+                    ? "bg-primary text-white"
+                    : "bg-surface text-muted"
+                }`}
+              >
+                {i + 1}
+              </div>
+
+              <span
+                className={
+                  step >= i + 1 ? "font-medium text-ink" : "text-muted"
+                }
+              >
+                {label}
+              </span>
+
+              {i === 0 && <div className="mx-2 h-px w-16 bg-border" />}
             </div>
-            <span
-              className={step >= i + 1 ? "text-ink font-medium" : "text-muted"}
-            >
-              {label}
-            </span>
-            {i === 0 && <div className="w-16 h-[1px] bg-border mx-2" />}
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
 
-      <div className="grid md:grid-cols-3 gap-8">
-        <form onSubmit={handlePlaceOrder} className="md:col-span-2">
+      <div className="grid gap-8 lg:grid-cols-3">
+        <form onSubmit={handlePlaceOrder} className="lg:col-span-2">
           <AnimatePresence mode="wait">
             {step === 1 && (
               <motion.div
@@ -162,7 +168,7 @@ export default function Checkout() {
                   placeholder="Street Address"
                   className={inputClass}
                 />
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <input
                     required
                     name="city"
@@ -183,7 +189,7 @@ export default function Checkout() {
                 <button
                   type="button"
                   onClick={() => setStep(2)}
-                  className="w-full bg-primary text-white py-4 rounded-full font-semibold hover:bg-primary-dark transition-all duration-300 mt-2"
+                  className="mt-2 w-full rounded-full bg-primary py-4 font-semibold text-white transition-all duration-300 hover:bg-primary-dark hover:shadow-lg active:scale-[0.98]"
                 >
                   Continue to Payment
                 </button>
@@ -210,7 +216,7 @@ export default function Checkout() {
                   placeholder="Card Number"
                   className={inputClass}
                 />
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <input
                     required
                     name="expiry"
@@ -238,7 +244,7 @@ export default function Checkout() {
                   </button>
                   <button
                     type="submit"
-                    className="flex-1 bg-primary text-white py-4 rounded-full font-semibold hover:bg-primary-dark transition-all duration-300"
+                    className="flex-1 rounded-full bg-primary py-4 font-semibold text-white transition-all duration-300 hover:bg-primary-dark hover:shadow-lg active:scale-[0.98]"
                   >
                     Place Order
                   </button>
@@ -248,8 +254,13 @@ export default function Checkout() {
           </AnimatePresence>
         </form>
 
-        <div className="bg-card border border-border rounded-2xl p-6 h-fit sticky top-28 card-shadow">
-          <h3 className="font-display font-bold text-lg mb-4">Order Summary</h3>
+        <div className="h-fit rounded-2xl border border-border bg-card p-5 shadow-sm lg:sticky lg:top-28 sm:p-6">
+          <h3 className="mb-4 text-lg font-display font-bold">Order Summary</h3>
+          <div className="mb-5 rounded-xl bg-green-50 p-3 dark:bg-green-500/10">
+            <p className="text-sm font-medium text-green-700 dark:text-green-400">
+              🔒 Secure SSL Encrypted Checkout
+            </p>
+          </div>
           <div className="space-y-3 max-h-64 overflow-y-auto pr-2">
             {items.map((item) => (
               <div key={item.id} className="flex justify-between text-sm">

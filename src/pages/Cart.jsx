@@ -13,7 +13,15 @@ function CouponInput() {
       {applied ? (
         <div className="flex items-center justify-between bg-success/10 text-success text-sm font-medium px-3 py-2.5 rounded-lg">
           <span>"{code}" applied</span>
-          <button onClick={() => { setApplied(false); setCode(""); }} className="text-xs underline">Remove</button>
+          <button
+            onClick={() => {
+              setApplied(false);
+              setCode("");
+            }}
+            className="text-xs underline"
+          >
+            Remove
+          </button>
         </div>
       ) : (
         <div className="flex gap-2">
@@ -64,7 +72,7 @@ export default function Cart() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-6 pt-28 pb-20">
+    <div className="mx-auto max-w-6xl px-4 pt-24 pb-24 sm:px-6 md:pt-28">
       <Link
         to="/shop"
         className="inline-flex items-center gap-2 text-muted hover:text-primary transition-colors mb-6 text-sm font-medium"
@@ -76,8 +84,8 @@ export default function Cart() {
         Your Cart
       </h1>
 
-      <div className="grid md:grid-cols-3 gap-8">
-        <div className="md:col-span-2 space-y-4">
+      <div className="grid gap-8 lg:grid-cols-3">
+        <div className="space-y-4 lg:col-span-2">
           <AnimatePresence>
             {items.map((item) => (
               <motion.div
@@ -86,12 +94,12 @@ export default function Cart() {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 20 }}
-                className="flex gap-4 bg-card border border-border rounded-2xl p-4 card-shadow"
-                >
+                className="flex flex-col gap-4 rounded-2xl border border-border bg-card p-4 transition-all duration-300 hover:shadow-lg sm:flex-row"
+              >
                 <img
                   src={item.image}
                   alt={item.name}
-                  className="w-24 h-24 rounded-xl object-cover bg-surface"
+                  className="h-24 w-full rounded-xl bg-surface object-cover sm:h-24 sm:w-24"
                 />
                 <div className="flex-1 flex flex-col justify-between">
                   <div className="flex justify-between">
@@ -139,10 +147,31 @@ export default function Cart() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-         className="bg-card border border-border rounded-2xl p-6 h-fit sticky top-28 card-shadow"
-         >
+          className="h-fit rounded-2xl border border-border bg-card p-5 shadow-sm lg:sticky lg:top-28 sm:p-6"
+        >
           <h3 className="font-display font-bold text-lg mb-4">Order Summary</h3>
           <CouponInput />
+          <div className="mb-5 rounded-xl bg-surface p-4">
+            <div className="flex justify-between text-sm">
+              <span>Free Shipping Progress</span>
+              <span>₹{Math.max(0, 999 - subtotal)}</span>
+            </div>
+
+            <div className="mt-2 h-2 overflow-hidden rounded-full bg-border">
+              <div
+                className="h-full rounded-full bg-primary transition-all duration-500"
+                style={{
+                  width: `${Math.min((subtotal / 999) * 100, 100)}%`,
+                }}
+              />
+            </div>
+
+            <p className="mt-2 text-xs text-muted">
+              {subtotal >= 999
+                ? "🎉 You have unlocked Free Shipping!"
+                : `Add ₹${(999 - subtotal).toLocaleString("en-IN")} more for free shipping.`}
+            </p>
+          </div>
           <div className="space-y-3 text-sm">
             <div className="flex justify-between text-muted">
               <span>Subtotal</span>
@@ -161,7 +190,7 @@ export default function Cart() {
           </div>
           <button
             onClick={() => navigate("/checkout")}
-            className="w-full mt-6 bg-primary text-white py-4 rounded-full font-semibold hover:bg-primary-dark transition-colors"
+            className="mt-6 w-full rounded-full bg-primary py-4 font-semibold text-white transition-all duration-300 hover:bg-primary-dark hover:shadow-lg active:scale-[0.98]"
           >
             Proceed to Checkout
           </button>
