@@ -45,11 +45,11 @@ function CouponInput() {
 
 export default function Cart() {
   const items = useCartStore((s) => s.items);
-  const updateQty = useCartStore((s) => s.updateQty);
+  const updateQuantity = useCartStore((s) => s.updateQuantity);
   const removeItem = useCartStore((s) => s.removeItem);
   const navigate = useNavigate();
 
-  const subtotal = items.reduce((sum, i) => sum + i.price * i.qty, 0);
+  const subtotal = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
   const shipping = subtotal > 0 ? 199 : 0;
   const total = subtotal + shipping;
 
@@ -118,24 +118,29 @@ export default function Cart() {
                     <div className="flex items-center bg-surface rounded-full px-1 py-1 border border-border">
                       <button
                         onClick={() =>
-                          updateQty(item.id, Math.max(1, item.qty - 1))
+                          updateQuantity(
+                            item.id,
+                            Math.max(1, item.quantity - 1),
+                          )
                         }
                         className="p-1.5 hover:text-primary transition-colors"
                       >
                         <Minus size={14} />
                       </button>
                       <span className="w-6 text-center text-sm">
-                        {item.qty}
+                        {item.quantity}
                       </span>
                       <button
-                        onClick={() => updateQty(item.id, item.qty + 1)}
+                        onClick={() =>
+                          updateQuantity(item.id, item.quantity + 1)
+                        }
                         className="p-1.5 hover:text-primary transition-colors"
                       >
                         <Plus size={14} />
                       </button>
                     </div>
                     <span className="font-display font-bold">
-                      ₹{(item.price * item.qty).toLocaleString("en-IN")}
+                      ₹{(item.price * item.quantity).toLocaleString("en-IN")}
                     </span>
                   </div>
                 </div>

@@ -17,6 +17,7 @@ import NotFound from "./pages/NotFound";
 import { useEffect } from "react";
 import { useAuthStore } from "./store/useAuthStore";
 import { useWishlistStore } from "./store/useWishlistStore";
+import { useCartStore } from "./store/useCartStore";
 import { useThemeStore } from "./store/useThemeStore";
 import { useProductStore } from "./store/useProductStore";
 import QuickViewModal from "./components/QuickViewModal";
@@ -29,6 +30,7 @@ export default function App() {
   const theme = useThemeStore((s) => s.theme);
   const loadUser = useAuthStore((s) => s.loadUser);
   const loadWishlist = useWishlistStore((s) => s.loadWishlist);
+  const loadCart = useCartStore((s) => s.loadCart);
   const fetchProducts = useProductStore((s) => s.fetchProducts);
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
@@ -36,11 +38,13 @@ export default function App() {
 
   useEffect(() => {
     const initializeApp = async () => {
-      await Promise.all([loadUser(), loadWishlist(), fetchProducts()]);
+      await loadUser();
+
+      await Promise.all([fetchProducts(), loadWishlist(), loadCart()]);
     };
 
     initializeApp();
-  }, [loadUser, loadWishlist, fetchProducts]);
+  }, [loadUser, loadWishlist, loadCart, fetchProducts]);
   return (
     <div className="min-h-screen flex flex-col">
       <ScrollToTop />
