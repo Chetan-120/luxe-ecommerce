@@ -141,7 +141,7 @@ export default function Shop() {
           </div>
 
           {loading ? (
-            <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4">
+            <div className="grid grid-cols-1 xs:grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4">
               {[...Array(6)].map((_, i) => (
                 <ProductSkeleton key={i} />
               ))}
@@ -168,7 +168,7 @@ export default function Shop() {
               </button>
             </div>
           ) : (
-            <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4">
+            <div className="grid grid-cols-1 xs:grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4">
               {filtered.map((p, i) => (
                 <ProductCard key={p._id} product={p} index={i} />
               ))}

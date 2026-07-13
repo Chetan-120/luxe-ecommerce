@@ -35,7 +35,9 @@ export default function Wishlist() {
     <div className="mx-auto max-w-7xl px-4 pt-28 pb-20 sm:px-6 lg:px-8">
       <div className="mb-8 flex items-center justify-between">
         <div>
-          <h1 className="text-4xl font-display font-bold">My Wishlist</h1>
+          <h1 className="text-3xl md:text-4xl font-display font-bold">
+            My Wishlist
+          </h1>
 
           <p className="mt-2 text-muted">
             {items.length} item{items.length > 1 ? "s" : ""} saved
@@ -48,7 +50,7 @@ export default function Wishlist() {
         />
       </div>
 
-      <div className="grid grid-cols-2 gap-5 md:grid-cols-3 xl:grid-cols-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
         {items.map((product) => (
           <div
             key={product._id || product.id}
@@ -62,24 +64,24 @@ export default function Wishlist() {
               />
             </Link>
 
-            <div className="p-5">
+            <div className="p-4 md:p-5">
               <p className="text-xs font-semibold uppercase tracking-wide text-primary">
                 {product.category}
               </p>
 
               <h2 className="mt-2 font-semibold text-ink">{product.name}</h2>
 
-              <p className="mt-4 text-2xl font-display font-bold text-primary">
+              <p className="mt-4 text-xl md:text-2xl font-display font-bold text-primary">
                 ₹{product.price.toLocaleString("en-IN")}
               </p>
 
-              <div className="mt-5 flex gap-2">
+              <div className="mt-5 flex flex-col sm:flex-row gap-3">
                 <button
                   onClick={() => {
                     addItem(product);
                     toggleWishlist(product);
                   }}
-                  className="flex flex-1 items-center justify-center gap-2 rounded-full bg-primary py-3 font-semibold text-white transition-all duration-300 hover:scale-105 hover:shadow-lg"
+                  className="flex w-full sm:flex-1 items-center justify-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-semibold text-white whitespace-nowrap transition-all duration-300 hover:scale-105 hover:shadow-lg"
                 >
                   <ShoppingBag size={17} />
                   Move to Cart
@@ -87,7 +89,7 @@ export default function Wishlist() {
 
                 <button
                   onClick={() => toggleWishlist(product)}
-                  className="flex h-12 w-12 items-center justify-center rounded-full border border-border transition-all duration-300 hover:border-red-500 hover:bg-red-50 hover:text-red-500"
+                  className="flex h-12 w-full sm:w-12 items-center justify-center rounded-full border border-border transition-all duration-300 hover:border-red-500 hover:bg-red-50 hover:text-red-500"
                 >
                   <Trash2 size={18} />
                 </button>

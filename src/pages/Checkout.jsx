@@ -3,11 +3,15 @@ import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { CreditCard, Truck, ArrowLeft } from "lucide-react";
 import { useCartStore } from "../store/useCartStore";
+import { useOrderStore } from "../store/useOrderStore";
 
 export default function Checkout() {
-  const items = useCartStore((s) => s.items);
-  const clearCart = useCartStore((s) => s.clearCart);
   const navigate = useNavigate();
+
+  const placeNewOrder = useOrderStore((state) => state.placeNewOrder);
+
+  const items = useCartStore((state) => state.items);
+
   const [step, setStep] = useState(1);
 
   const [form, setForm] = useState({
@@ -21,17 +25,35 @@ export default function Checkout() {
     cvv: "",
   });
 
-  const subtotal = items.reduce((sum, i) => sum + i.price * i.qty, 0);
+  const subtotal = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
   const shipping = subtotal > 0 ? 199 : 0;
   const total = subtotal + shipping;
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handlePlaceOrder = (e) => {
+  const handlePlaceOrder = async (e) => {
     e.preventDefault();
-    clearCart();
-    navigate("/order-success");
+
+    try {
+      await placeNewOrder({
+        shippingAddress: {
+          fullName: form.name,
+          phone: "",
+          address: form.address,
+          city: form.city,
+          state: "",
+          pincode: form.pincode,
+          country: "India",
+        },
+
+        paymentMethod: "Card",
+      });
+
+      navigate("/order-success");
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const inputClass =
@@ -245,9 +267,11 @@ export default function Checkout() {
                 className="flex items-center justify-between rounded-xl bg-surface p-3"
               >
                 <span className="text-muted">
-                  {item.name} × {item.qty}
+                  {item.name} × {item.quantity}
                 </span>
-                <span>₹{(item.price * item.qty).toLocaleString("en-IN")}</span>
+                <span>
+                  ₹{(item.price * item.quantity).toLocaleString("en-IN")}
+                </span>
               </div>
             ))}
           </div>

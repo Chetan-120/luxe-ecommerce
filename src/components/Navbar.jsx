@@ -47,12 +47,12 @@ export default function Navbar() {
           : "bg-bg"
       }`}
     >
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-2 px-4 py-3 sm:px-6 lg:px-8">
         <Link
           to="/"
           className="flex items-center gap-3 shrink-0 transition-transform hover:scale-105"
         >
-          <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary text-lg font-bold text-white shadow-lg">
+          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-lg font-bold text-white shadow-lg">
             L
           </span>
           <div className="hidden sm:block">
@@ -83,8 +83,17 @@ export default function Navbar() {
           Bengaluru
         </div>
 
-        <div className="flex items-center gap-3 shrink-0">
+        <div className="flex items-center gap-2 shrink-0">
           <ThemeToggle />
+
+          {user && (
+            <button
+              onClick={() => navigate("/orders")}
+              className="hidden lg:flex rounded-full border border-border px-4 py-2 text-sm font-medium hover:border-primary hover:text-primary transition"
+            >
+              My Orders
+            </button>
+          )}
 
           {user ? (
             <>
@@ -134,7 +143,7 @@ export default function Navbar() {
 
           <button
             onClick={() => navigate("/cart")}
-            className="relative flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-primary/20 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+            className="relative flex items-center gap-2 rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-primary/20 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
           >
             <ShoppingBag size={16} />
             <span className="hidden sm:inline">Cart</span>
@@ -163,13 +172,13 @@ export default function Navbar() {
 
       {/* Category pill strip */}
       <div className="border-y border-border bg-card">
-        <div className="mx-auto flex max-w-7xl gap-2 overflow-x-auto px-4 py-3 no-scrollbar sm:px-6 lg:px-8">
+        <div className="mx-auto flex max-w-7xl gap-2 overflow-x-auto whitespace-nowrap px-3 py-2 no-scrollbar sm:px-6 lg:px-8">
           {categories.map((c) => (
             <NavLink
               key={c.name}
               to={c.path}
               className={({ isActive }) =>
-                `whitespace-nowrap rounded-full px-5 py-2 text-sm font-medium transition-all duration-300 ${
+                `flex-shrink-0 whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium transition-all duration-300 ${
                   isActive
                     ? "bg-primary text-white shadow-lg"
                     : "bg-surface hover:bg-primary hover:text-white"
@@ -190,13 +199,13 @@ export default function Navbar() {
             exit={{ height: 0, opacity: 0 }}
             className="overflow-hidden border-t border-border bg-card shadow-xl md:hidden"
           >
-            <div className="px-6 py-4">
+            <div className="px-4 py-4">
               <form
                 onSubmit={(e) => {
                   handleSearch(e);
                   setOpen(false);
                 }}
-                className="flex items-center gap-2 bg-surface rounded-full px-4 py-2.5 mb-4"
+                className="flex items-center gap-2 bg-surface rounded-full px-3 py-2 mb-4"
               >
                 <Search size={16} className="text-muted" />
                 <input
@@ -221,6 +230,16 @@ export default function Navbar() {
               >
                 Wishlist
               </Link>
+
+              {user && (
+                <Link
+                  to="/orders"
+                  onClick={() => setOpen(false)}
+                  className="block py-2 text-sm font-medium"
+                >
+                  My Orders
+                </Link>
+              )}
               {user ? (
                 <button
                   onClick={async () => {

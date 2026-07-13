@@ -50,9 +50,7 @@ export const useWishlistStore = create((set, get) => ({
       if (exists) {
         await removeFromWishlist(product._id || product.id, token);
 
-        set({
-          items: get().items.filter((i) => i.id !== product.id),
-        });
+        await get().loadWishlist();
 
         toast("Removed from wishlist", {
           icon: "💔",
@@ -60,9 +58,7 @@ export const useWishlistStore = create((set, get) => ({
       } else {
         await addToWishlist(product._id || product.id, token);
 
-        set({
-          items: [...get().items, product],
-        });
+        await get().loadWishlist();
 
         toast.success("Added to wishlist");
       }

@@ -220,20 +220,20 @@ export default function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.3 }}
-          className="grid grid-cols-4 gap-3 md:gap-5 mt-6"
+          className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6"
         >
           {shortcuts.map((s) => (
             <Link
               key={s.name}
               to={s.path}
-              className="flex flex-col items-center gap-2 bg-card border border-border rounded-2xl py-5 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300"
+              className="flex flex-col items-center justify-center gap-2 bg-card border border-border rounded-2xl py-6 px-4 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300"
             >
               <div
                 className={`w-11 h-11 rounded-xl flex items-center justify-center ${s.color}`}
               >
                 <s.icon size={20} />
               </div>
-              <span className="text-xs md:text-sm font-medium text-center px-1 text-ink">
+              <span className="text-sm font-medium text-center leading-tight text-ink">
                 {s.name}
               </span>
             </Link>

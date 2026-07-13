@@ -80,11 +80,11 @@ export default function Cart() {
         <ArrowLeft size={16} /> Continue Shopping
       </Link>
 
-      <h1 className="text-3xl md:text-4xl font-display font-bold mb-8">
+      <h1 className="text-2xl sm:text-3xl md:text-4xl font-display font-bold mb-8">
         Your Cart
       </h1>
 
-      <div className="grid gap-8 lg:grid-cols-3">
+      <div className="grid gap-6 lg:grid-cols-3">
         <div className="space-y-4 lg:col-span-2">
           <AnimatePresence>
             {items.map((item) => (
@@ -94,15 +94,15 @@ export default function Cart() {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 20 }}
-                className="flex flex-col gap-4 rounded-2xl border border-border bg-card p-4 transition-all duration-300 hover:shadow-lg sm:flex-row"
+                className="flex flex-col sm:flex-row gap-4 rounded-2xl border border-border bg-card p-4 transition-all duration-300 hover:shadow-lg"
               >
                 <img
                   src={item.image}
                   alt={item.name}
-                  className="h-24 w-full rounded-xl bg-surface object-cover sm:h-24 sm:w-24"
+                  className="aspect-square w-full sm:w-24 rounded-xl bg-surface object-cover"
                 />
                 <div className="flex-1 flex flex-col justify-between">
-                  <div className="flex justify-between">
+                  <div className="flex items-start justify-between gap-3">
                     <div>
                       <h3 className="font-semibold">{item.name}</h3>
                       <p className="text-muted text-sm">{item.category}</p>
@@ -114,7 +114,7 @@ export default function Cart() {
                       <Trash2 size={18} />
                     </button>
                   </div>
-                  <div className="flex items-center justify-between">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                     <div className="flex items-center bg-surface rounded-full px-1 py-1 border border-border">
                       <button
                         onClick={() =>
@@ -152,7 +152,7 @@ export default function Cart() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="h-fit rounded-2xl border border-border bg-card p-5 shadow-sm lg:sticky lg:top-28 sm:p-6"
+          className="h-fit rounded-2xl border border-border bg-card p-4 sm:p-6 shadow-sm lg:sticky lg:top-28"
         >
           <h3 className="font-display font-bold text-lg mb-4">Order Summary</h3>
           <CouponInput />
@@ -195,7 +195,7 @@ export default function Cart() {
           </div>
           <button
             onClick={() => navigate("/checkout")}
-            className="mt-6 w-full rounded-full bg-primary py-4 font-semibold text-white transition-all duration-300 hover:bg-primary-dark hover:shadow-lg active:scale-[0.98]"
+            className="mt-6 w-full rounded-full bg-primary py-3.5 text-sm sm:text-base font-semibold text-white transition-all duration-300 hover:bg-primary-dark hover:shadow-lg active:scale-[0.98]"
           >
             Proceed to Checkout
           </button>

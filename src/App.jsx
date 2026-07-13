@@ -11,6 +11,7 @@ import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import OrderSuccess from "./pages/OrderSuccess";
 import Wishlist from "./pages/Wishlist";
+import Orders from "./pages/Orders";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import NotFound from "./pages/NotFound";
@@ -100,6 +101,15 @@ export default function App() {
               element={
                 <PageTransition>
                   <Wishlist />
+                </PageTransition>
+              }
+            />
+
+            <Route
+              path="/orders"
+              element={
+                <PageTransition>
+                  <Orders />
                 </PageTransition>
               }
             />

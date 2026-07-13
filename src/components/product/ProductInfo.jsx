@@ -9,7 +9,7 @@ export default function ProductInfo({ product, discount, original }) {
       <p className="mt-4 text-sm font-medium uppercase tracking-widest text-muted">
         LUXE Premium Collection
       </p>
-      <h1 className="mt-3 font-display text-3xl font-bold leading-tight tracking-tight text-ink sm:text-4xl lg:text-5xl">
+      <h1 className="mt-3 font-display text-2xl sm:text-3xl lg:text-5xl font-bold leading-tight tracking-tight text-ink">
         {product.name}
       </h1>
 
@@ -28,12 +28,12 @@ export default function ProductInfo({ product, discount, original }) {
         </div>
       </div>
 
-      <div className="mt-8 flex flex-wrap items-end gap-4">
-        <span className="font-display text-5xl font-bold text-ink">
+      <div className="mt-6 flex flex-wrap items-end gap-3">
+        <span className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-ink">
           ₹{product.price.toLocaleString("en-IN")}
         </span>
 
-        <span className="text-lg text-muted line-through">
+        <span className="text-base sm:text-lg text-muted line-through">
           ₹{original.toLocaleString("en-IN")}
         </span>
 
@@ -60,12 +60,12 @@ export default function ProductInfo({ product, discount, original }) {
             ↩️ 30-Day Returns
           </span>
         </div>
-        <div className="mt-8 rounded-2xl border border-primary/20 bg-primary/5 p-5">
+        <div className="mt-6 rounded-2xl border border-primary/20 bg-primary/5 p-4 sm:p-5">
           <h3 className="text-sm font-semibold text-primary">
             Available Offers
           </h3>
 
-          <ul className="mt-3 space-y-2 text-sm text-muted">
+          <ul className="mt-3 space-y-2 text-sm leading-6 text-muted">
             <li>✔ Extra 10% OFF on prepaid orders</li>
             <li>✔ Free shipping on all orders</li>
             <li>✔ EMI available on selected cards</li>

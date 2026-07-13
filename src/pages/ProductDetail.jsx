@@ -160,15 +160,15 @@ export default function ProductDetail() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-24 md:pt-28 pb-36 md:pb-20">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 md:pt-28 pb-28 md:pb-20">
       <Link
         to="/shop"
-        className="inline-flex items-center gap-2 text-muted hover:text-primary transition-colors mb-6 text-sm font-medium"
+        className="inline-flex items-center gap-2 text-muted hover:text-primary transition-colors mb-5 text-sm font-medium"
       >
         <ArrowLeft size={16} /> Back to Shop
       </Link>
 
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-14">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-14">
         <ProductImageGallery
           product={product}
           wishlisted={wishlisted}
