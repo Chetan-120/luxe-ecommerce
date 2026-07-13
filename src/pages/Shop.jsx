@@ -48,17 +48,17 @@ export default function Shop() {
   }, [activeCategory, sortBy, searchQuery]);
 
   return (
-    <div className="max-w-7xl mx-auto px-6 pt-28 pb-20">
-      <div className="mb-6">
+    <div className="mx-auto max-w-7xl px-4 pt-24 pb-20 sm:px-6 lg:px-8">
+      <div className="mb-8 rounded-3xl border border-border bg-card p-6 shadow-sm">
         <span className="text-primary text-xs font-semibold tracking-wide">
           {searchQuery ? "SEARCH RESULTS" : "FULL CATALOG"}
         </span>
-        <h1 className="text-3xl md:text-4xl font-display font-bold mt-1">
+        <h1 className="mt-2 text-3xl font-display font-bold text-ink md:text-5xl">
           {searchQuery ? `Results for "${searchQuery}"` : "Shop All Products"}
         </h1>
       </div>
 
-      <div className="flex md:hidden justify-between items-center mb-5">
+      <div className="mb-6 flex items-center justify-between rounded-2xl bg-surface p-4 md:hidden">
         <span className="text-muted text-sm">{filtered.length} products</span>
         <button
           onClick={() => setFiltersOpen(true)}
@@ -68,8 +68,8 @@ export default function Shop() {
         </button>
       </div>
 
-      <div className="grid md:grid-cols-[220px_1fr] gap-8">
-        <aside className="hidden md:block space-y-7 h-fit sticky top-32">
+      <div className="grid gap-8 lg:grid-cols-[260px_1fr]">
+        <aside className="sticky top-28 hidden h-fit rounded-3xl border border-border bg-card p-6 shadow-sm lg:block">
           <div>
             <h4 className="font-semibold mb-3 text-sm">Category</h4>
             <div className="space-y-1.5">
@@ -109,27 +109,62 @@ export default function Shop() {
               ))}
             </div>
           </div>
+          <div className="mt-8">
+            <button
+              onClick={() => {
+                setActiveCategory("All");
+                setSortBy("featured");
+                setSearchParams({});
+              }}
+              className="w-full rounded-xl border border-border py-3 font-medium transition hover:border-primary hover:text-primary"
+            >
+              Clear Filters
+            </button>
+          </div>
         </aside>
 
         <div>
-          <div className="hidden md:block mb-5">
-            <span className="text-muted text-sm">
-              {filtered.length} products
-            </span>
+          <div className="mb-6 flex items-center justify-between rounded-2xl bg-surface p-4">
+            <div>
+              <p className="text-xs uppercase tracking-wide text-muted">
+                Products
+              </p>
+
+              <p className="text-lg font-semibold text-ink">
+                {filtered.length} Available
+              </p>
+            </div>
           </div>
 
           {loading ? (
-            <div className="grid grid-cols-2 lg:grid-cols-3 gap-5">
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4">
               {[...Array(6)].map((_, i) => (
                 <ProductSkeleton key={i} />
               ))}
             </div>
           ) : filtered.length === 0 ? (
-            <p className="text-muted text-center py-20">
-              No products found in this category.
-            </p>
+            <div className="rounded-3xl border border-border bg-card py-20 text-center">
+              <h3 className="text-2xl font-display font-bold">
+                No Products Found
+              </h3>
+
+              <p className="mt-3 text-muted">
+                Try another category or clear the filters.
+              </p>
+
+              <button
+                onClick={() => {
+                  setActiveCategory("All");
+                  setSortBy("featured");
+                  setSearchParams({});
+                }}
+                className="mt-6 rounded-full bg-primary px-6 py-3 font-semibold text-white"
+              >
+                Clear Filters
+              </button>
+            </div>
           ) : (
-            <div className="grid grid-cols-2 lg:grid-cols-3 gap-5">
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4">
               {filtered.map((p, i) => (
                 <ProductCard key={p.id} product={p} index={i} />
               ))}
@@ -152,7 +187,7 @@ export default function Shop() {
             exit={{ x: "100%" }}
             transition={{ type: "tween", duration: 0.3 }}
             onClick={(e) => e.stopPropagation()}
-            className="absolute right-0 top-0 h-full w-[80%] max-w-xs bg-bg p-6 overflow-y-auto"
+            className="absolute right-0 top-0 h-full w-[85%] max-w-sm overflow-y-auto rounded-l-3xl bg-card p-6 shadow-2xl"
           >
             <div className="flex justify-between items-center mb-8">
               <h3 className="font-display font-semibold text-lg">Filters</h3>

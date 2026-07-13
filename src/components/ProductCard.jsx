@@ -43,14 +43,14 @@ export default function ProductCard({ product, index = 0, className = "" }) {
       style={{
         transform: `perspective(800px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
       }}
-      className={`tilt-card group card-shadow card-shadow-hover bg-card rounded-2xl overflow-hidden border border-border ${className}`}
+      className={`group overflow-hidden rounded-3xl border border-border bg-card transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl ${className}`}
     >
       <Link to={`/product/${product.id}`}>
         <div className="relative overflow-hidden aspect-[4/5] bg-surface">
           <img
             src={product.image}
             alt={product.name}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
           />
 
           <motion.span
@@ -66,13 +66,17 @@ export default function ProductCard({ product, index = 0, className = "" }) {
             {discount}% OFF
           </motion.span>
 
+          <span className="absolute top-12 left-3 rounded-full bg-black/70 px-2 py-1 text-[10px] font-semibold text-white backdrop-blur">
+            In Stock
+          </span>
+
           <motion.button
             whileTap={{ scale: 1.3 }}
             onClick={(e) => {
               e.preventDefault();
               toggleWishlist(product);
             }}
-            className="absolute top-3 right-3 w-9 h-9 rounded-full bg-card flex items-center justify-center shadow-md"
+            className="absolute top-3 right-3 flex h-10 w-10 items-center justify-center rounded-full bg-card shadow-md"
           >
             <motion.span
               animate={wishlisted ? { scale: [1, 1.4, 1] } : {}}
@@ -91,14 +95,14 @@ export default function ProductCard({ product, index = 0, className = "" }) {
               e.preventDefault();
               openQuickView(product);
             }}
-            className="absolute bottom-3 left-3 bg-card text-xs font-semibold px-3 py-2 rounded-full shadow-md opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 hover:bg-ink hover:text-white"
+            className="absolute bottom-3 left-3 rounded-full bg-card px-3 py-2 text-xs font-semibold shadow-md transition-all duration-300 hover:bg-ink hover:text-white md:opacity-0 md:translate-y-2 md:group-hover:opacity-100 md:group-hover:translate-y-0"
           >
             Quick View
           </button>
 
           <button
             onClick={handleAdd}
-            className="absolute bottom-3 right-3 w-10 h-10 rounded-full bg-card flex items-center justify-center shadow-md opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 hover:bg-primary hover:text-white overflow-hidden"
+            className="absolute bottom-3 right-3 flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-card shadow-md transition-all duration-300 hover:bg-primary hover:text-white md:opacity-0 md:translate-y-2 md:group-hover:opacity-100 md:group-hover:translate-y-0"
           >
             <motion.div
               animate={{ y: added ? -30 : 0, opacity: added ? 0 : 1 }}
@@ -111,7 +115,7 @@ export default function ProductCard({ product, index = 0, className = "" }) {
                 initial={{ y: 30, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.25 }}
-                className="absolute inset-0 flex items-center justify-center bg-success text-white"
+                className="absolute inset-0 flex items-center justify-center bg-green-600 text-white"
               >
                 <Check size={16} />
               </motion.div>
@@ -119,11 +123,11 @@ export default function ProductCard({ product, index = 0, className = "" }) {
           </button>
         </div>
 
-        <div className="p-4">
-          <span className="text-xs text-muted font-medium">
+        <div className="p-5">
+          <span className="text-xs font-semibold uppercase tracking-wide text-primary">
             {product.category}
           </span>
-          <h3 className="font-semibold text-ink mt-0.5 truncate">
+          <h3 className="mt-1 min-h-[48px] text-sm font-semibold leading-6 text-ink md:text-base">
             {product.name}
           </h3>
 
@@ -134,7 +138,7 @@ export default function ProductCard({ product, index = 0, className = "" }) {
             <span className="text-muted text-xs">1.2k sold</span>
           </div>
 
-          <div className="flex items-center gap-2 mt-3">
+          <div className="mt-3 flex flex-wrap items-center gap-2">
             <span className="font-display font-bold text-lg">
               ₹{product.price.toLocaleString("en-IN")}
             </span>
