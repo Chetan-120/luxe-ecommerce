@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { ShoppingBag, Menu, X, Search, MapPin, Heart } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCartStore } from "../store/useCartStore";
@@ -37,30 +37,39 @@ export default function Navbar() {
 
   return (
     <header
-      className={`fixed top-0 left-0 w-full z-50 bg-bg transition-shadow duration-300 ${
-        scrolled ? "shadow-[0_2px_16px_rgba(0,0,0,0.08)]" : ""
+      className={`fixed top-0 left-0 z-50 w-full transition-all duration-300 ${
+        scrolled
+          ? "border-b border-border bg-bg/90 backdrop-blur-xl shadow-lg"
+          : "bg-bg"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-6 flex items-center justify-between py-4 gap-6">
-        <Link to="/" className="flex items-center gap-2 shrink-0">
-          <span className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center text-white font-display font-bold text-lg">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
+        <Link
+          to="/"
+          className="flex items-center gap-3 shrink-0 transition-transform hover:scale-105"
+        >
+          <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary text-lg font-bold text-white shadow-lg">
             L
           </span>
-          <span className="text-xl font-display font-bold tracking-tight hidden sm:block">
-            LUXE
-          </span>
+          <div className="hidden sm:block">
+            <h1 className="font-display text-2xl font-bold tracking-tight">
+              LUXE
+            </h1>
+
+            <p className="text-[11px] text-muted">Premium Store</p>
+          </div>
         </Link>
 
         <form
           onSubmit={handleSearch}
-          className="hidden md:flex items-center gap-2 flex-1 max-w-md bg-surface rounded-full px-4 py-2.5"
+          className="hidden flex-1 items-center gap-2 rounded-full border border-border bg-surface px-4 py-2.5 transition-all focus-within:border-primary lg:flex max-w-lg"
         >
           <Search size={17} className="text-muted shrink-0" />
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search for products, brands..."
+            placeholder="Search premium products..."
             className="bg-transparent outline-none text-sm w-full placeholder:text-muted"
           />
         </form>
@@ -75,11 +84,11 @@ export default function Navbar() {
 
           <button
             onClick={() => navigate("/wishlist")}
-            className="relative w-9 h-9 rounded-full hidden sm:flex items-center justify-center bg-surface hover:bg-surface2 transition-colors"
+            className="relative hidden h-10 w-10 items-center justify-center rounded-full border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:border-primary hover:text-primary sm:flex"
           >
             <Heart size={16} />
             {wishlistCount > 0 && (
-              <span className="absolute -top-1 -right-1 bg-primary text-white text-[10px] font-bold w-4.5 h-4.5 rounded-full flex items-center justify-center">
+              <span className="absolute -top-1 -right-1 bg-primary text-white text-[10px] font-bold h-5 w-5 rounded-full flex items-center justify-center">
                 {wishlistCount}
               </span>
             )}
@@ -87,7 +96,7 @@ export default function Navbar() {
 
           <button
             onClick={() => navigate("/cart")}
-            className="relative flex items-center gap-2 bg-contrast text-white px-4 py-2.5 rounded-full text-sm font-medium hover:opacity-90 transition-opacity"
+            className="relative flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-primary/20 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
           >
             <ShoppingBag size={16} />
             <span className="hidden sm:inline">Cart</span>
@@ -106,7 +115,7 @@ export default function Navbar() {
           </button>
 
           <button
-            className="md:hidden w-9 h-9 flex items-center justify-center"
+            className="flex h-10 w-10 items-center justify-center rounded-full hover:bg-surface md:hidden"
             onClick={() => setOpen(!open)}
           >
             {open ? <X size={20} /> : <Menu size={20} />}
@@ -115,12 +124,22 @@ export default function Navbar() {
       </div>
 
       {/* Category pill strip */}
-      <div className="border-t border-border">
-        <div className="max-w-7xl mx-auto px-6 flex gap-2 py-3 overflow-x-auto no-scrollbar">
+      <div className="border-y border-border bg-card">
+        <div className="mx-auto flex max-w-7xl gap-2 overflow-x-auto px-4 py-3 no-scrollbar sm:px-6 lg:px-8">
           {categories.map((c) => (
-            <Link key={c.name} to={c.path} className="pill pill-inactive">
+            <NavLink
+              key={c.name}
+              to={c.path}
+              className={({ isActive }) =>
+                `whitespace-nowrap rounded-full px-5 py-2 text-sm font-medium transition-all duration-300 ${
+                  isActive
+                    ? "bg-primary text-white shadow-lg"
+                    : "bg-surface hover:bg-primary hover:text-white"
+                }`
+              }
+            >
               {c.name}
-            </Link>
+            </NavLink>
           ))}
         </div>
       </div>
@@ -131,7 +150,7 @@ export default function Navbar() {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            className="md:hidden overflow-hidden bg-bg border-t border-border"
+            className="overflow-hidden border-t border-border bg-card shadow-xl md:hidden"
           >
             <div className="px-6 py-4">
               <form
@@ -147,7 +166,7 @@ export default function Navbar() {
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder="Search products..."
-                  className="bg-transparent outline-none text-sm w-full placeholder:text-muted"
+                  className="w-full bg-transparent text-sm outline-none placeholder:text-muted"
                 />
               </form>
               <Link

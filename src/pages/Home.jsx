@@ -6,16 +6,14 @@ import LuxuryCollections from "../components/home/LuxuryCollections";
 import WhyChooseUs from "../components/home/WhyChooseUs";
 import Testimonials from "../components/home/Testimonials";
 import Brands from "../components/home/Brands";
-import Marquee from "../components/Marquee";
+
 import FeaturedProducts from "../components/FeaturedProducts";
-import Newsletter from "../components/Newsletter";
 import { products } from "../data/products";
 import ProductCarousel from "../components/ProductCarousel";
 import { useRecentlyViewedStore } from "../store/useRecentlyViewedStore";
 
 export default function Home() {
-  const trending = [...products].sort((a, b) => b.rating - a.rating);
-  const dealsOfDay = [...products].sort((a, b) => a.price - b.price);
+  
   const recentlyViewed = useRecentlyViewedStore((s) => s.items);
 
   return (
@@ -24,7 +22,7 @@ export default function Home() {
 
       <HeroSection />
 
-      <Marquee />
+      <LuxuryCollections />
 
       <TrendingProducts />
 
@@ -32,15 +30,7 @@ export default function Home() {
 
       <NewArrivals />
 
-      <LuxuryCollections />
-
-      <WhyChooseUs />
-
-      <Testimonials />
-
       <Brands />
-
-      <Newsletter />
 
       {recentlyViewed.length > 0 && (
         <ProductCarousel
@@ -49,6 +39,10 @@ export default function Home() {
           products={recentlyViewed}
         />
       )}
+
+      <WhyChooseUs />
+
+      <Testimonials />
     </>
   );
 }

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { CreditCard, Truck, CheckCircle2, ArrowLeft } from "lucide-react";
+import { CreditCard, Truck, ArrowLeft } from "lucide-react";
 import { useCartStore } from "../store/useCartStore";
 
 export default function Checkout() {
@@ -9,7 +9,7 @@ export default function Checkout() {
   const clearCart = useCartStore((s) => s.clearCart);
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
-  const [placed, setPlaced] = useState(false);
+
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -30,55 +30,12 @@ export default function Checkout() {
 
   const handlePlaceOrder = (e) => {
     e.preventDefault();
-    setPlaced(true);
     clearCart();
-    setTimeout(() => navigate("/"), 3500);
+    navigate("/order-success");
   };
 
   const inputClass =
     "w-full bg-surface border border-border rounded-xl px-4 py-3.5 focus:outline-none focus:border-primary transition-all duration-300";
-
-  if (placed) {
-    return (
-      <div className="min-h-screen flex items-center justify-center px-6">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5, type: "spring" }}
-          className="text-center"
-        >
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-            className="relative"
-          >
-            <CheckCircle2 size={80} className="text-success mx-auto mb-6" />
-            {[...Array(8)].map((_, i) => (
-              <motion.span
-                key={i}
-                initial={{ opacity: 1, x: 0, y: 0, scale: 1 }}
-                animate={{
-                  opacity: 0,
-                  x: Math.cos((i / 8) * Math.PI * 2) * 70,
-                  y: Math.sin((i / 8) * Math.PI * 2) * 70,
-                  scale: 0,
-                }}
-                transition={{ duration: 0.8, delay: 0.3 }}
-                className="absolute top-1/2 left-1/2 w-2 h-2 rounded-full bg-primary"
-              />
-            ))}
-          </motion.div>
-          <h1 className="text-3xl font-display font-bold">
-            Order Placed Successfully!
-          </h1>
-          <p className="text-muted mt-3">
-            Thank you for shopping with LUXE. Redirecting you home...
-          </p>
-        </motion.div>
-      </div>
-    );
-  }
 
   if (items.length === 0) {
     return (
@@ -97,9 +54,29 @@ export default function Checkout() {
         <ArrowLeft size={16} /> Back to Cart
       </button>
 
-      <h1 className="text-3xl md:text-4xl font-display font-bold mb-8">
-        Checkout
-      </h1>
+      <div className="mb-8">
+        <h1 className="text-3xl md:text-4xl font-display font-bold">
+          Secure Checkout
+        </h1>
+
+        <p className="mt-2 text-muted">
+          Complete your purchase securely with encrypted payment.
+        </p>
+
+        <div className="mt-5 flex flex-wrap gap-3">
+          <span className="rounded-full bg-green-100 px-4 py-2 text-xs font-semibold text-green-700 dark:bg-green-500/10 dark:text-green-400">
+            ✓ 100% Secure Payment
+          </span>
+
+          <span className="rounded-full bg-blue-100 px-4 py-2 text-xs font-semibold text-blue-700 dark:bg-blue-500/10 dark:text-blue-400">
+            🚚 Free Returns
+          </span>
+
+          <span className="rounded-full bg-orange-100 px-4 py-2 text-xs font-semibold text-orange-700 dark:bg-orange-500/10 dark:text-orange-400">
+            ⚡ Fast Delivery
+          </span>
+        </div>
+      </div>
 
       <div className="mb-10 overflow-x-auto">
         <div className="flex min-w-max items-center gap-4">
@@ -138,7 +115,7 @@ export default function Checkout() {
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
-                className="bg-card border border-border rounded-2xl p-6 space-y-4 card-shadow"
+                className="rounded-3xl border border-border bg-card p-7 space-y-5 card-shadow"
               >
                 <h3 className="font-display font-semibold text-lg flex items-center gap-2 mb-2">
                   <Truck size={19} className="text-primary" /> Shipping Details
@@ -149,7 +126,7 @@ export default function Checkout() {
                   value={form.name}
                   onChange={handleChange}
                   placeholder="Full Name"
-                  className={inputClass}
+                  className={`${inputClass} hover:border-primary`}
                 />
                 <input
                   required
@@ -158,7 +135,7 @@ export default function Checkout() {
                   value={form.email}
                   onChange={handleChange}
                   placeholder="Email Address"
-                  className={inputClass}
+                  className={`${inputClass} hover:border-primary`}
                 />
                 <input
                   required
@@ -166,7 +143,7 @@ export default function Checkout() {
                   value={form.address}
                   onChange={handleChange}
                   placeholder="Street Address"
-                  className={inputClass}
+                  className={`${inputClass} hover:border-primary`}
                 />
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <input
@@ -175,7 +152,7 @@ export default function Checkout() {
                     value={form.city}
                     onChange={handleChange}
                     placeholder="City"
-                    className={inputClass}
+                    className={`${inputClass} hover:border-primary`}
                   />
                   <input
                     required
@@ -183,7 +160,7 @@ export default function Checkout() {
                     value={form.pincode}
                     onChange={handleChange}
                     placeholder="Pincode"
-                    className={inputClass}
+                    className={`${inputClass} hover:border-primary`}
                   />
                 </div>
                 <button
@@ -191,7 +168,7 @@ export default function Checkout() {
                   onClick={() => setStep(2)}
                   className="mt-2 w-full rounded-full bg-primary py-4 font-semibold text-white transition-all duration-300 hover:bg-primary-dark hover:shadow-lg active:scale-[0.98]"
                 >
-                  Continue to Payment
+                  Continue →
                 </button>
               </motion.div>
             )}
@@ -202,7 +179,7 @@ export default function Checkout() {
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
-                className="bg-card border border-border rounded-2xl p-6 space-y-4 card-shadow"
+                className="rounded-3xl border border-border bg-card p-7 space-y-5 card-shadow"
               >
                 <h3 className="font-display font-semibold text-lg flex items-center gap-2 mb-2">
                   <CreditCard size={19} className="text-primary" /> Payment
@@ -214,7 +191,7 @@ export default function Checkout() {
                   value={form.card}
                   onChange={handleChange}
                   placeholder="Card Number"
-                  className={inputClass}
+                  className={`${inputClass} hover:border-primary`}
                 />
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <input
@@ -223,7 +200,7 @@ export default function Checkout() {
                     value={form.expiry}
                     onChange={handleChange}
                     placeholder="MM/YY"
-                    className={inputClass}
+                    className={`${inputClass} hover:border-primary`}
                   />
                   <input
                     required
@@ -231,7 +208,7 @@ export default function Checkout() {
                     value={form.cvv}
                     onChange={handleChange}
                     placeholder="CVV"
-                    className={inputClass}
+                    className={`${inputClass} hover:border-primary`}
                   />
                 </div>
                 <div className="flex gap-4 mt-2">
@@ -246,7 +223,7 @@ export default function Checkout() {
                     type="submit"
                     className="flex-1 rounded-full bg-primary py-4 font-semibold text-white transition-all duration-300 hover:bg-primary-dark hover:shadow-lg active:scale-[0.98]"
                   >
-                    Place Order
+                    Complete Order
                   </button>
                 </div>
               </motion.div>
@@ -254,16 +231,19 @@ export default function Checkout() {
           </AnimatePresence>
         </form>
 
-        <div className="h-fit rounded-2xl border border-border bg-card p-5 shadow-sm lg:sticky lg:top-28 sm:p-6">
-          <h3 className="mb-4 text-lg font-display font-bold">Order Summary</h3>
-          <div className="mb-5 rounded-xl bg-green-50 p-3 dark:bg-green-500/10">
+        <div className="h-fit rounded-3xl border border-border bg-card p-6 shadow-lg lg:sticky lg:top-28">
+          <h3 className="mb-5 text-xl font-display font-bold">Order Summary</h3>
+          <div className="mb-6 rounded-2xl border border-green-200 bg-green-50 p-4 dark:border-green-500/20 dark:bg-green-500/10">
             <p className="text-sm font-medium text-green-700 dark:text-green-400">
               🔒 Secure SSL Encrypted Checkout
             </p>
           </div>
-          <div className="space-y-3 max-h-64 overflow-y-auto pr-2">
+          <div className="space-y-4 max-h-72 overflow-y-auto pr-2">
             {items.map((item) => (
-              <div key={item.id} className="flex justify-between text-sm">
+              <div
+                key={item.id}
+                className="flex items-center justify-between rounded-xl bg-surface p-3"
+              >
                 <span className="text-muted">
                   {item.name} × {item.qty}
                 </span>

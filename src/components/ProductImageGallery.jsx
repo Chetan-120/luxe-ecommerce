@@ -53,7 +53,9 @@ export default function ProductImageGallery({
             className="cursor-zoom-in"
           >
             <div className="relative">
-              <ImageZoom src={images[activeImage]} alt={product.name} />
+              <div className="aspect-[4/5] lg:aspect-square overflow-hidden">
+                <ImageZoom src={images[activeImage]} alt={product.name} />
+              </div>
 
               <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 gap-2">
                 {images.map((_, index) => (
@@ -76,30 +78,30 @@ export default function ProductImageGallery({
         </AnimatePresence>
         <button
           onClick={previousImage}
-          className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-20 h-10 w-10 rounded-full bg-card/90 backdrop-blur flex items-center justify-center shadow-md hover:scale-105 transition"
+          className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-20 h-12 w-12 rounded-full  backdrop-blur flex items-center justify-center shadow-md hover:scale-105 transition"
         >
           <ChevronLeft size={18} />
         </button>
 
         <button
           onClick={nextImage}
-          className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-20 h-10 w-10 rounded-full bg-card/90 backdrop-blur flex items-center justify-center shadow-md hover:scale-105 transition"
+          className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-20 h-10 w-1h-12 w-12 rounded-full  backdrop-blur flex items-center justify-center shadow-md hover:scale-105 transition"
         >
           <ChevronRight size={18} />
         </button>
 
         <div className="absolute top-4 left-4 flex flex-col gap-2">
-          <span className="badge-offer rounded-md px-3 py-1 text-xs font-semibold">
+          <span className="rounded-full bg-primary px-3 py-1.5 text-white shadow-lg text-xs font-semibold">
             {discount}% OFF
           </span>
 
-          <span className="rounded-full bg-black/70 px-3 py-1 text-xs font-medium text-white backdrop-blur">
+          <span className="rounded-full bg-black/50 backdrop-blur-xl px-3 py-1 text-xs font-medium text-white backdrop-blur">
             {activeImage + 1} / {totalImages}
           </span>
         </div>
         <button
           onClick={onWishlist}
-          className="absolute top-4 right-2 md:right-4 h-10 w-10 rounded-full bg-card shadow-md flex items-center justify-center"
+          className="absolute top-4 right-4 h-11 w-11 rounded-full bg-white/90 dark:bg-black/60 backdrop-blur-xl border border-white/20 flex items-center justify-center shadow-xl hover:scale-110 transition-all"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -119,14 +121,14 @@ export default function ProductImageGallery({
           <button
             key={index}
             onClick={() => selectImage(index)}
-            className={`w-20 flex-shrink-0 overflow-hidden rounded-xl border-2 transition-all duration-300 ${
+            className={`w-24 flex-shrink-0 overflow-hidden rounded-2xl border-2 transition-all duration-300 hover:scale-105 ${
               activeImage === index ? "border-primary" : "border-border"
             }`}
           >
             <img
               src={image}
               alt=""
-              className="aspect-square w-full object-cover"
+              className="aspect-square w-full object-cover transition-transform duration-500 hover:scale-110"
             />
           </button>
         ))}

@@ -9,6 +9,8 @@ import Shop from "./pages/Shop";
 import ProductDetail from "./pages/ProductDetail";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
+import OrderSuccess from "./pages/OrderSuccess";
+import Wishlist from "./pages/Wishlist";
 import NotFound from "./pages/NotFound";
 import { useEffect } from "react";
 import { useThemeStore } from "./store/useThemeStore";
@@ -64,6 +66,7 @@ export default function App() {
                 </PageTransition>
               }
             />
+
             <Route
               path="/checkout"
               element={
@@ -72,6 +75,43 @@ export default function App() {
                 </PageTransition>
               }
             />
+
+            <Route
+              path="/wishlist"
+              element={
+                <PageTransition>
+                  <Wishlist />
+                </PageTransition>
+              }
+            />
+
+            <Route
+              path="/order-success"
+              element={
+                <PageTransition>
+                  <OrderSuccess />
+                </PageTransition>
+              }
+            />
+
+            <Route
+              path="/wishlist"
+              element={
+                <PageTransition>
+                  <Wishlist />
+                </PageTransition>
+              }
+            />
+
+            <Route
+              path="/order-success"
+              element={
+                <PageTransition>
+                  <OrderSuccess />
+                </PageTransition>
+              }
+            />
+
             <Route
               path="*"
               element={

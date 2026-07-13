@@ -49,7 +49,7 @@ export default function Shop() {
 
   return (
     <div className="mx-auto max-w-7xl px-4 pt-24 pb-20 sm:px-6 lg:px-8">
-      <div className="mb-8 rounded-3xl border border-border bg-card p-6 shadow-sm">
+      <div className="mt-6 mb-8 rounded-3xl border border-border bg-card p-6 shadow-sm">
         <span className="text-primary text-xs font-semibold tracking-wide">
           {searchQuery ? "SEARCH RESULTS" : "FULL CATALOG"}
         </span>
