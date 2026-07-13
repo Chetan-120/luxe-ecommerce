@@ -4,6 +4,7 @@ import { ShoppingBag, Menu, X, Search, MapPin, Heart } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCartStore } from "../store/useCartStore";
 import { useWishlistStore } from "../store/useWishlistStore";
+import { useAuthStore } from "../store/useAuthStore";
 import ThemeToggle from "./ThemeToggle";
 
 const categories = [
@@ -28,6 +29,9 @@ export default function Navbar() {
   const wishlistCount = useWishlistStore((s) => s.items.length);
   const navigate = useNavigate();
   const count = items.reduce((a, i) => a + i.qty, 0);
+
+  const user = useAuthStore((state) => state.user);
+  const logout = useAuthStore((state) => state.logout);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
@@ -81,6 +85,40 @@ export default function Navbar() {
 
         <div className="flex items-center gap-3 shrink-0">
           <ThemeToggle />
+
+          {user ? (
+            <>
+              <span className="hidden lg:block text-sm font-medium">
+                Hi, {user.name}
+              </span>
+
+              <button
+                onClick={async () => {
+                  await logout();
+                  navigate("/login");
+                }}
+                className="hidden sm:flex rounded-full border border-border px-4 py-2 text-sm font-medium hover:border-primary hover:text-primary transition"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                onClick={() => navigate("/login")}
+                className="hidden sm:flex rounded-full border border-border px-4 py-2 text-sm font-medium hover:border-primary hover:text-primary transition"
+              >
+                Login
+              </button>
+
+              <button
+                onClick={() => navigate("/register")}
+                className="hidden sm:flex rounded-full bg-primary px-4 py-2 text-sm font-medium text-white hover:opacity-90 transition"
+              >
+                Register
+              </button>
+            </>
+          )}
 
           <button
             onClick={() => navigate("/wishlist")}
@@ -183,6 +221,36 @@ export default function Navbar() {
               >
                 Wishlist
               </Link>
+              {user ? (
+                <button
+                  onClick={async () => {
+                    await logout();
+                    setOpen(false);
+                    navigate("/login");
+                  }}
+                  className="block py-2 text-sm font-medium"
+                >
+                  Logout
+                </button>
+              ) : (
+                <>
+                  <Link
+                    to="/login"
+                    onClick={() => setOpen(false)}
+                    className="block py-2 text-sm font-medium"
+                  >
+                    Login
+                  </Link>
+
+                  <Link
+                    to="/register"
+                    onClick={() => setOpen(false)}
+                    className="block py-2 text-sm font-medium"
+                  >
+                    Register
+                  </Link>
+                </>
+              )}
             </div>
           </motion.div>
         )}

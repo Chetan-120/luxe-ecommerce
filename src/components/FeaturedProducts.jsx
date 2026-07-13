@@ -1,7 +1,9 @@
-import { products } from "../data/products";
 import ProductCarousel from "./ProductCarousel";
+import { useProductStore } from "../store/useProductStore";
 
 export default function FeaturedProducts() {
+  const products = useProductStore((s) => s.products);
+
   return (
     <ProductCarousel
       subtitle="HANDPICKED FOR YOU"

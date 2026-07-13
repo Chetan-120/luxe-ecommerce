@@ -60,7 +60,7 @@ export default function ProductCarousel({
       >
         {products.map((p, i) => (
           <ProductCard
-            key={p.id}
+            key={p._id || p.id}
             product={p}
             index={i}
             className="w-[220px] flex-shrink-0 snap-start sm:w-[240px]"

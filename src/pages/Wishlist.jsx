@@ -51,10 +51,10 @@ export default function Wishlist() {
       <div className="grid grid-cols-2 gap-5 md:grid-cols-3 xl:grid-cols-4">
         {items.map((product) => (
           <div
-            key={product.id}
+            key={product._id || product.id}
             className="group overflow-hidden rounded-3xl border border-border bg-card shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-xl"
           >
-            <Link to={`/product/${product.id}`}>
+            <Link to={`/product/${product._id || product.id}`}>
               <img
                 src={product.image}
                 alt={product.name}

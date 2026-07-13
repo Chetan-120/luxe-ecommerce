@@ -11,9 +11,14 @@ import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import OrderSuccess from "./pages/OrderSuccess";
 import Wishlist from "./pages/Wishlist";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 import NotFound from "./pages/NotFound";
 import { useEffect } from "react";
+import { useAuthStore } from "./store/useAuthStore";
+import { useWishlistStore } from "./store/useWishlistStore";
 import { useThemeStore } from "./store/useThemeStore";
+import { useProductStore } from "./store/useProductStore";
 import QuickViewModal from "./components/QuickViewModal";
 import { useQuickViewStore } from "./store/useQuickViewStore";
 
@@ -22,10 +27,20 @@ export default function App() {
     useQuickViewStore();
   const location = useLocation();
   const theme = useThemeStore((s) => s.theme);
+  const loadUser = useAuthStore((s) => s.loadUser);
+  const loadWishlist = useWishlistStore((s) => s.loadWishlist);
+  const fetchProducts = useProductStore((s) => s.fetchProducts);
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
   }, [theme]);
 
+  useEffect(() => {
+    const initializeApp = async () => {
+      await Promise.all([loadUser(), loadWishlist(), fetchProducts()]);
+    };
+
+    initializeApp();
+  }, [loadUser, loadWishlist, fetchProducts]);
   return (
     <div className="min-h-screen flex flex-col">
       <ScrollToTop />
@@ -84,21 +99,20 @@ export default function App() {
                 </PageTransition>
               }
             />
-
             <Route
-              path="/order-success"
+              path="/login"
               element={
                 <PageTransition>
-                  <OrderSuccess />
+                  <Login />
                 </PageTransition>
               }
             />
 
             <Route
-              path="/wishlist"
+              path="/register"
               element={
                 <PageTransition>
-                  <Wishlist />
+                  <Register />
                 </PageTransition>
               }
             />

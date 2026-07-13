@@ -1,7 +1,8 @@
 import ProductCarousel from "../ProductCarousel";
-import { products } from "../../data/products";
+import { useProductStore } from "../../store/useProductStore";
 
 export default function TrendingProducts() {
+  const products = useProductStore((s) => s.products);
   const trendingProducts = [...products]
     .sort((a, b) => b.rating - a.rating)
     .slice(0, 8);
@@ -25,9 +26,7 @@ export default function TrendingProducts() {
           </div>
         </div>
 
-        <ProductCarousel
-          products={trendingProducts}
-        />
+        <ProductCarousel products={trendingProducts} />
       </div>
     </section>
   );

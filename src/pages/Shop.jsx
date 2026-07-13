@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect } from "react";
 import { motion } from "framer-motion";
 import { SlidersHorizontal, X } from "lucide-react";
-import { products } from "../data/products";
+import { useProductStore } from "../store/useProductStore";
 import ProductCard from "../components/ProductCard";
 import ProductSkeleton from "../components/ProductSkeleton";
 import { useSearchParams } from "react-router-dom";
@@ -23,11 +23,13 @@ export default function Shop() {
   const [sortBy, setSortBy] = useState("featured");
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [loading, setLoading] = useState(true);
+  const products = useProductStore((s) => s.products);
 
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 500);
-    return () => clearTimeout(timer);
-  }, []);
+    if (products.length > 0) {
+      setLoading(false);
+    }
+  }, [products]);
 
   const filtered = useMemo(() => {
     let list = [...products];
@@ -45,7 +47,9 @@ export default function Shop() {
     if (sortBy === "price-desc") list.sort((a, b) => b.price - a.price);
     if (sortBy === "rating") list.sort((a, b) => b.rating - a.rating);
     return list;
-  }, [activeCategory, sortBy, searchQuery]);
+  }, [products, activeCategory, sortBy, searchQuery]);
+  console.log("Products State:", products);
+  console.log("Filtered State:", filtered);
 
   return (
     <div className="mx-auto max-w-7xl px-4 pt-24 pb-20 sm:px-6 lg:px-8">
@@ -166,7 +170,7 @@ export default function Shop() {
           ) : (
             <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4">
               {filtered.map((p, i) => (
-                <ProductCard key={p.id} product={p} index={i} />
+                <ProductCard key={p._id} product={p} index={i} />
               ))}
             </div>
           )}

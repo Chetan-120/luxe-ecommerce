@@ -7,10 +7,11 @@ import { useWishlistStore } from "../store/useWishlistStore";
 import { useQuickViewStore } from "../store/useQuickViewStore";
 
 export default function ProductCard({ product, index = 0, className = "" }) {
+  console.log("ProductCard Product:", product);
   const addItem = useCartStore((s) => s.addItem);
   const { toggleWishlist, isWishlisted } = useWishlistStore();
-  const wishlisted = isWishlisted(product.id);
-  const discount = 15 + (product.id % 3) * 5;
+  const wishlisted = isWishlisted(product._id);
+  const discount = 20;
   const cardRef = useRef(null);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [added, setAdded] = useState(false);
@@ -26,7 +27,10 @@ export default function ProductCard({ product, index = 0, className = "" }) {
 
   const handleAdd = (e) => {
     e.preventDefault();
-    addItem(product);
+    addItem({
+      ...product,
+      id: product._id,
+    });
     setAdded(true);
     setTimeout(() => setAdded(false), 1200);
   };
@@ -45,7 +49,10 @@ export default function ProductCard({ product, index = 0, className = "" }) {
       }}
       className={`group overflow-hidden rounded-3xl border border-border bg-card transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl ${className}`}
     >
-      <Link to={`/product/${product.id}`}>
+      <Link
+        to={`/product/${product._id}`}
+        onClick={() => console.log("Navigating with _id:", product._id)}
+      >
         <div className="relative overflow-hidden aspect-[4/5] bg-surface">
           <img
             src={product.image}
@@ -74,7 +81,10 @@ export default function ProductCard({ product, index = 0, className = "" }) {
             whileTap={{ scale: 1.3 }}
             onClick={(e) => {
               e.preventDefault();
-              toggleWishlist(product);
+              toggleWishlist({
+                ...product,
+                id: product._id,
+              });
             }}
             className="absolute top-3 right-3 flex h-10 w-10 items-center justify-center rounded-full bg-card shadow-md"
           >
@@ -93,7 +103,10 @@ export default function ProductCard({ product, index = 0, className = "" }) {
           <button
             onClick={(e) => {
               e.preventDefault();
-              openQuickView(product);
+              openQuickView({
+                ...product,
+                id: product._id,
+              });
             }}
             className="absolute bottom-3 left-3 rounded-full bg-card px-3 py-2 text-xs font-semibold shadow-md transition-all duration-300 hover:bg-ink hover:text-white md:opacity-0 md:translate-y-2 md:group-hover:opacity-100 md:group-hover:translate-y-0"
           >

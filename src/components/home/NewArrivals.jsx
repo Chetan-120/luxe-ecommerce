@@ -1,10 +1,9 @@
 import ProductCarousel from "../ProductCarousel";
-import { products } from "../../data/products";
+import { useProductStore } from "../../store/useProductStore";
 
 export default function NewArrivals() {
-  const newArrivals = [...products]
-    .sort((a, b) => b.id - a.id)
-    .slice(0, 8);
+  const products = useProductStore((s) => s.products);
+  const newArrivals = [...products].reverse().slice(0, 8);
 
   return (
     <section className="py-20 bg-surface">
@@ -20,14 +19,13 @@ export default function NewArrivals() {
             </h2>
 
             <p className="mt-3 max-w-2xl text-muted">
-              Fresh additions carefully selected to keep your collection ahead of the trends.
+              Fresh additions carefully selected to keep your collection ahead
+              of the trends.
             </p>
           </div>
         </div>
 
-        <ProductCarousel
-          products={newArrivals}
-        />
+        <ProductCarousel products={newArrivals} />
       </div>
     </section>
   );

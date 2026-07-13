@@ -3,7 +3,7 @@ import { useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 import { Star, ArrowLeft, Truck, ShieldCheck, RotateCcw } from "lucide-react";
 
-import { products } from "../data/products";
+import { getProductById } from "../api/productApi";
 import reviewsData from "../data/reviews";
 
 import { useCartStore } from "../store/useCartStore";
@@ -28,12 +28,15 @@ const sizes = ["S", "M", "L", "XL"];
 
 export default function ProductDetail() {
   const { id } = useParams();
+
+  console.log("========== PRODUCT DETAIL ==========");
+  console.log("Current URL:", window.location.href);
+  console.log("Route ID:", id);
+  console.log("====================================");
   const navigate = useNavigate();
-  const product = useMemo(
-    () => products.find((p) => p.id === Number(id)),
-    [id],
-  );
+  const [product, setProduct] = useState(null);
   const [qty, setQty] = useState(1);
+  const [loading, setLoading] = useState(true);
 
   const [selectedSize, setSelectedSize] = useState("M");
   const [selectedColor, setSelectedColor] = useState({
@@ -43,7 +46,7 @@ export default function ProductDetail() {
   });
 
   const initialReviews = useMemo(
-    () => getReviewsByProduct(Number(id), reviewsData[Number(id)] || []),
+    () => getReviewsByProduct(id, reviewsData[id] || []),
     [id],
   );
 
@@ -52,12 +55,37 @@ export default function ProductDetail() {
   const { toggleWishlist, isWishlisted } = useWishlistStore();
   const addView = useRecentlyViewedStore((s) => s.addView);
   const recentlyViewed = useRecentlyViewedStore((s) => s.items).filter(
-    (p) => p.id !== Number(id),
+    (p) => p._id !== id,
   );
 
   useEffect(() => {
-    if (product) addView(product);
+    const fetchProduct = async () => {
+      try {
+        const data = await getProductById(id);
+        setProduct(data.product);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProduct();
+  }, [id]);
+
+  useEffect(() => {
+    if (product) {
+      addView(product);
+    }
   }, [product]);
+
+  if (loading) {
+    return (
+      <div className="pt-40 text-center">
+        <p className="text-muted">Loading...</p>
+      </div>
+    );
+  }
 
   if (!product) {
     return (
@@ -70,8 +98,8 @@ export default function ProductDetail() {
     );
   }
 
-  const wishlisted = isWishlisted(product.id);
-  const discount = 15 + (product.id % 3) * 5;
+  const wishlisted = isWishlisted(product._id);
+  const discount = 20;
   const original = Math.round(product.price * (1 + discount / 100));
   const colors = [
     {
@@ -96,7 +124,7 @@ export default function ProductDetail() {
     material: "Premium Material",
     warranty: "12 Months",
     country: "India",
-    sku: `LUXE-${product.id.toString().padStart(4, "0")}`,
+    sku: `LUXE-${product._id.slice(-6).toUpperCase()}`,
     shipping: "Free Shipping",
   };
 
@@ -104,17 +132,29 @@ export default function ProductDetail() {
 
   const handleAddToCart = () => {
     if (needsSize && !selectedSize) return;
-    addItem(product, qty);
+    addItem(
+      {
+        ...product,
+        id: product._id,
+      },
+      qty,
+    );
   };
 
   const handleBuyNow = () => {
     if (needsSize && !selectedSize) return;
-    addItem(product, qty);
+    addItem(
+      {
+        ...product,
+        id: product._id,
+      },
+      qty,
+    );
     navigate("/checkout");
   };
 
   const handleReviewSubmit = (review) => {
-    saveReview(Number(id), review);
+    saveReview(id, review);
 
     setReviews((current) => [review, ...current]);
   };
@@ -133,7 +173,12 @@ export default function ProductDetail() {
           product={product}
           wishlisted={wishlisted}
           discount={discount}
-          onWishlist={() => toggleWishlist(product)}
+          onWishlist={() =>
+            toggleWishlist({
+              ...product,
+              id: product._id,
+            })
+          }
         />
 
         <motion.div

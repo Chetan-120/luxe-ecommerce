@@ -9,7 +9,7 @@ import {
   ArrowRight,
   Sparkles,
 } from "lucide-react";
-import { products } from "../data/products";
+import { useProductStore } from "../store/useProductStore";
 import { useScroll, useTransform } from "framer-motion";
 
 const shortcuts = [
@@ -42,7 +42,9 @@ const shortcuts = [
 ];
 
 export default function HeroSection() {
-  const floatProducts = [products[0], products[2], products[4]];
+  const products = useProductStore((s) => s.products);
+  const floatProducts =
+    products.length >= 5 ? [products[0], products[2], products[4]] : [];
   const { scrollY } = useScroll();
   const y1 = useTransform(scrollY, [0, 400], [0, -40]);
   const y2 = useTransform(scrollY, [0, 400], [0, -70]);
@@ -148,67 +150,68 @@ export default function HeroSection() {
             </motion.div>
 
             <div className="relative hidden md:block h-[380px]">
-              {floatProducts.map((p, i) => {
-                const positions = [
-                  {
-                    top: "0%",
-                    left: "10%",
-                    rotate: -6,
-                    delay: 0.3,
-                    size: "w-40",
-                  },
-                  {
-                    top: "18%",
-                    left: "52%",
-                    rotate: 4,
-                    delay: 0.5,
-                    size: "w-44",
-                  },
-                  {
-                    top: "52%",
-                    left: "22%",
-                    rotate: -3,
-                    delay: 0.7,
-                    size: "w-36",
-                  },
-                ][i];
-                return (
-                  <motion.div
-                    key={p.id}
-                    initial={{ opacity: 0, y: 40, rotate: 0 }}
-                    animate={{ opacity: 1, y: 0, rotate: positions.rotate }}
-                    transition={{
-                      duration: 0.7,
-                      delay: positions.delay,
-                      ease: [0.16, 1, 0.3, 1],
-                    }}
-                    whileHover={{ rotate: 0, scale: 1.05, zIndex: 20 }}
-                    className={`absolute ${positions.size} bg-card rounded-2xl p-3 shadow-2xl cursor-pointer`}
-                    style={{ top: positions.top, left: positions.left }}
-                  >
+              {floatProducts.length > 0 &&
+                floatProducts.map((p, i) => {
+                  const positions = [
+                    {
+                      top: "0%",
+                      left: "10%",
+                      rotate: -6,
+                      delay: 0.3,
+                      size: "w-40",
+                    },
+                    {
+                      top: "18%",
+                      left: "52%",
+                      rotate: 4,
+                      delay: 0.5,
+                      size: "w-44",
+                    },
+                    {
+                      top: "52%",
+                      left: "22%",
+                      rotate: -3,
+                      delay: 0.7,
+                      size: "w-36",
+                    },
+                  ][i];
+                  return (
                     <motion.div
-                      animate={{ y: [0, -10, 0] }}
+                      key={p._id}
+                      initial={{ opacity: 0, y: 40, rotate: 0 }}
+                      animate={{ opacity: 1, y: 0, rotate: positions.rotate }}
                       transition={{
-                        duration: 3.5 + i,
-                        repeat: Infinity,
-                        ease: "easeInOut",
+                        duration: 0.7,
+                        delay: positions.delay,
+                        ease: [0.16, 1, 0.3, 1],
                       }}
+                      whileHover={{ rotate: 0, scale: 1.05, zIndex: 20 }}
+                      className={`absolute ${positions.size} bg-card rounded-2xl p-3 shadow-2xl cursor-pointer`}
+                      style={{ top: positions.top, left: positions.left }}
                     >
-                      <img
-                        src={p.image}
-                        alt={p.name}
-                        className="w-full aspect-square object-cover rounded-xl"
-                      />
-                      <p className="text-xs font-semibold mt-2 truncate text-ink">
-                        {p.name}
-                      </p>
-                      <p className="text-primary font-bold text-sm">
-                        ₹{p.price.toLocaleString("en-IN")}
-                      </p>
+                      <motion.div
+                        animate={{ y: [0, -10, 0] }}
+                        transition={{
+                          duration: 3.5 + i,
+                          repeat: Infinity,
+                          ease: "easeInOut",
+                        }}
+                      >
+                        <img
+                          src={p.image}
+                          alt={p.name}
+                          className="w-full aspect-square object-cover rounded-xl"
+                        />
+                        <p className="text-xs font-semibold mt-2 truncate text-ink">
+                          {p.name}
+                        </p>
+                        <p className="text-primary font-bold text-sm">
+                          ₹{p.price.toLocaleString("en-IN")}
+                        </p>
+                      </motion.div>
                     </motion.div>
-                  </motion.div>
-                );
-              })}
+                  );
+                })}
             </div>
           </div>
         </motion.div>
